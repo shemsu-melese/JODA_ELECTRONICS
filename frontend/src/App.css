@@ -6,3 +6,8 @@
   color: rgb(94, 19, 165);
   text-decoration: underline;
 }
+p{
+  text-align: center;
+  color: blue;
+  font-size: xx-large;
+}

@@ -1,11 +1,7 @@
-// backend/src/server.js
 
-/**
- * Server Entry Point
- * 
- * This file starts our Express server and connects to the database.
- * It's kept separate from app.js for testing purposes.
- */
+//   Server Entry Point
+//   This file starts our Express server and connects to the database.
+ 
 
 // Load environment variables FIRST (before anything else)
 require('dotenv').config();
@@ -32,14 +28,14 @@ const startServer = async () => {
         // Start listening for requests
         app.listen(PORT, () => {
             
-            console.log(`🚀 JODA Electronics Server Running! under Port: ${PORT} `);
-            console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+            console.log(`JODA Electronics Server Running! under Port: ${PORT} `);
+            console.log(`Environment: ${process.env.NODE_ENV}`);
             
          
         });
         
     } catch (error) {
-        console.error('❌ Failed to start server:', error.message);
+        console.error('Failed to start server:', error.message);
         process.exit(1); // Exit with error code
     }
 };

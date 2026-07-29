@@ -28,15 +28,31 @@ app.use((req, res, next) => {
 // ============================================
 // ROUTES
 // ============================================
+app.get('/', (req, res)=>{
+    res.status(200).json({
+        success: true,
+        message: 'JODA Electronics HOME PAGE',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV
+    });
+});
 
+app.get('/contact', (req, res)=>{
+    res.status(200).json({
+        success: true,
+        message: 'JODA Electronics CONTACT PAGE',
+        timestamp: new Date().toISOString(),
+        
+    });
+});
 /**
  * Health Check Route
  * A simple endpoint to verify our server is running
  */
-app.get('/api/health', (req, res) => {
+app.get('/product', (req, res) => {
     res.status(200).json({
         success: true,
-        message: 'JODA Electronics API is running! 🚀',
+        message: 'JODA Electronics API PRODUCT PAGE',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV
     });

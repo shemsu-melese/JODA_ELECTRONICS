@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
+const categoryRoutes = require('./routes/categoryRoutes');
+
 const app = express();
 
 app.use(cors({
@@ -65,6 +67,7 @@ app.get('/product', (req, res) => {
 // Handle 404 - Route not found
 app.use(notFoundHandler);
 
+app.use('/api/categories', categoryRoutes);
 // Handle all other errors
 app.use(errorHandler);
 

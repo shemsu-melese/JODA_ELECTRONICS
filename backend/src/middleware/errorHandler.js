@@ -15,7 +15,7 @@ class AppError extends Error {
 
 // 404 Handler
 const notFoundHandler = (req, res, next) => {
-    const error = new AppError(`File not found: ${req.originalUrl}`, 404);
+    const error = new AppError(`${req.originalUrl} : File not found!`, 404);
     next(error); 
 }
 
@@ -31,8 +31,6 @@ const errorHandler = (err, req, res, next) => {
             success: false,
             status: err.status,
             message: err.message,
-            stack: err.stack,        // Shows where the error occurred
-            error: err               // Full error object
         });
     }
     

@@ -4,10 +4,21 @@
  
 
 // Load environment variables FIRST (before anything else)
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
+const result = dotenv.config({ 
+    path: path.join(__dirname, '..', '.env') 
+});
+
+if (result.error) {
+    console.error(' Error loading .env file:', result.error.message);
+} else {
+    console.log('Environment variables loaded');
+}
 
 const app = require('./app');
 const { testConnection } = require('./config/db');
+const runMigration = require('./config/migrate');
 
 // Get port from environment variables or use default
 const PORT = process.env.PORT || 5000;
@@ -18,7 +29,10 @@ const PORT = process.env.PORT || 5000;
  */
 const startServer = async () => {
     try {
-        // Test database connection first
+        // STEP 1: Run database migration (create tables, seed data)
+        await runMigration();
+        
+        // STEP 2: Test the database connection
         const dbConnected = await testConnection();
         
         if (!dbConnected) {
@@ -29,9 +43,7 @@ const startServer = async () => {
         app.listen(PORT, () => {
             
             console.log(`JODA Electronics Server Running! under Port: ${PORT} `);
-            console.log(`Environment: ${process.env.NODE_ENV}`);
-            
-         
+        
         });
         
     } catch (error) {

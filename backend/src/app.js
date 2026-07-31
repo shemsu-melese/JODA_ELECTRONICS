@@ -1,74 +1,57 @@
-//Express Application Setup
- 
+// backend/src/app.js
+
 const express = require('express');
 const cors = require('cors');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
+// ============================================
+// IMPORT ROUTES
+// ============================================
 const categoryRoutes = require('./routes/categoryRoutes');
+const productRoutes = require('./routes/productRoutes');    
 
 const app = express();
 
+// ============================================
+// MIDDLEWARE
+// ============================================
 app.use(cors({
-    origin: 'http://localhost:5173', 
-    credentials: true,               
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], 
-    allowedHeaders: ['Content-Type', 'Authorization'] 
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json());        // Parse JSON request bodies
-app.use(express.urlencoded({ extended: true })); // Parse form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-/**
- * Request Logger 
- * Logs every request so we can see what's happening
- */
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path}`);
+    console.log(`📨 ${req.method} ${req.path}`);
     next();
 });
 
 // ============================================
 // ROUTES
 // ============================================
-app.get('/', (req, res)=>{
+
+// Health Check
+app.get('/api/health', (req, res) => {
     res.status(200).json({
         success: true,
-        message: 'JODA Electronics HOME PAGE',
+        message: 'JODA Electronics API is running! 🚀',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV || 'not set',
+        database: process.env.DB_NAME || 'not set'
     });
 });
 
-app.get('/contact', (req, res)=>{
-    res.status(200).json({
-        success: true,
-        message: 'JODA Electronics CONTACT PAGE',
-        timestamp: new Date().toISOString(),
-        
-    });
-});
-/**
- * Health Check Route
- * A simple endpoint to verify our server is running
- */
-app.get('/product', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'JODA Electronics API PRODUCT PAGE',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV
-    });
-});
-
-// API Routes will be added here as we build features
-// Example: app.use('/api/products', productRoutes);
-
-
-// Handle 404 - Route not found
-app.use(notFoundHandler);
-
+// Routes
 app.use('/api/categories', categoryRoutes);
-// Handle all other errors
+app.use('/api/products', productRoutes); 
+// ============================================
+// ERROR HANDLING
+// ============================================
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;

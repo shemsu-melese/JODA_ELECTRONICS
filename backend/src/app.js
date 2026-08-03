@@ -4,17 +4,13 @@ const express = require('express');
 const cors = require('cors');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
-// ============================================
-// IMPORT ROUTES
-// ============================================
+// Import Routes
 const categoryRoutes = require('./routes/categoryRoutes');
-const productRoutes = require('./routes/productRoutes');    
+const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/authRoutes');        // 🆕 ADD
 
 const app = express();
 
-// ============================================
-// MIDDLEWARE
-// ============================================
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
@@ -30,27 +26,21 @@ app.use((req, res, next) => {
     next();
 });
 
-// ============================================
-// ROUTES
-// ============================================
-
 // Health Check
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         success: true,
         message: 'JODA Electronics API is running! 🚀',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'not set',
-        database: process.env.DB_NAME || 'not set'
+        timestamp: new Date().toISOString()
     });
 });
 
 // Routes
 app.use('/api/categories', categoryRoutes);
-app.use('/api/products', productRoutes); 
-// ============================================
-// ERROR HANDLING
-// ============================================
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);                          // 🆕 ADD
+
+// Error Handling
 app.use(notFoundHandler);
 app.use(errorHandler);
 

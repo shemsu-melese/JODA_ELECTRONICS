@@ -1,9 +1,4 @@
-
 //   Server Entry Point
-//   This file starts our Express server and connects to the database.
- 
-
-// Load environment variables FIRST (before anything else)
 const dotenv = require('dotenv');
 const path = require('path');
 const result = dotenv.config({ 
@@ -23,45 +18,41 @@ const runMigration = require('./config/migrate');
 // Get port from environment variables or use default
 const PORT = process.env.PORT || 5000;
 
-/**
- * Start the server
- * We use an async function so we can await the database connection
- */
+//  Start the server
+
 const startServer = async () => {
     try {
-        // STEP 1: Run database migration (create tables, seed data)
+        // Run database migration
         await runMigration();
         
-        // STEP 2: Test the database connection
+        // Test the database connection
         const dbConnected = await testConnection();
         
         if (!dbConnected) {
-            console.warn('⚠️  Server starting without database connection');
+            console.warn('Server starting without database connection');
         }
         
-        // Start listening for requests
+        // Start listening
         app.listen(PORT, () => {
-            
             console.log(`JODA Electronics Server Running! under Port: ${PORT} `);
-        
         });
         
     } catch (error) {
         console.error('Failed to start server:', error.message);
-        process.exit(1); // Exit with error code
+        process.exit(1);
     }
 };
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (error) => {
-    console.error('UNHANDLED REJECTION! 💥 Shutting down...');
+    console.error('UNHANDLED REJECTION!');
     console.error(error);
     process.exit(1);
 });
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error) => {
-    console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+    console.error('UNCAUGHT EXCEPTION!');
     console.error(error);
     process.exit(1);
 });

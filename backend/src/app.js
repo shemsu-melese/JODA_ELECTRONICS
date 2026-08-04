@@ -1,5 +1,3 @@
-// backend/src/app.js
-
 const express = require('express');
 const cors = require('cors');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
@@ -7,7 +5,10 @@ const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 // Import Routes
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
-const authRoutes = require('./routes/authRoutes');        // 🆕 ADD
+const authRoutes = require('./routes/authRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes'); 
+const reviewRoutes = require('./routes/reviewRoutes'); 
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         success: true,
-        message: 'JODA Electronics API is running! 🚀',
+        message: 'JODA Electronics API is running!',
         timestamp: new Date().toISOString()
     });
 });
@@ -38,7 +39,10 @@ app.get('/api/health', (req, res) => {
 // Routes
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/auth', authRoutes);                          // 🆕 ADD
+app.use('/api/auth', authRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Error Handling
 app.use(notFoundHandler);
